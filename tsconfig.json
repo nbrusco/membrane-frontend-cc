@@ -27,6 +27,21 @@
             ],
             "@assets/*": [
                 "src/assets/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ],
+            "@services/*": [
+                "src/services/*"
+            ],
+            "@hooks/*": [
+                "src/hooks/*"
+            ],
+            "@Interface/*": [
+                "src/Interface/*"
+            ],
+            "@interfaces/*": [
+                "src/interfaces/*"
             ]
         }
     }
