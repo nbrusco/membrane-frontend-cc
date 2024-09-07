@@ -44,8 +44,7 @@ export default defineConfig({
   plugins: [
     react(),
     autoAlias({
-      mode: 'sync',
-      prefix: '#'
+      mode: 'sync'
     }),
 
     ViteMinifyPlugin({}),
