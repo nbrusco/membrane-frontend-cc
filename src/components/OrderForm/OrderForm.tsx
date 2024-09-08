@@ -1,9 +1,12 @@
+import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import dayjs, { Dayjs } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+
+import { v4 as uuidv4 } from 'uuid'
 
 import { Button, Typography } from '@mui/material'
 
@@ -16,11 +19,14 @@ import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 
+import { useOrdersStore } from '@/store/orders/store.orders'
+
 import { useCoins } from '@/hooks/useCoins/useCoins'
 
 import DateTimeSelector from '../DateTimeSelector/DateTimeSelector'
 
 import { validationProps } from '@/utils/validationProps'
+import { formatToUSD } from '@/utils/formatToUSD'
 
 const validationSchema = yup
   .object()
@@ -33,23 +39,19 @@ const validationSchema = yup
       .positive('Amount must be greater than 0')
       .required('Amount is required')
       .min(0.000001, 'Amount must be at least 0.00001'),
-    price: yup.number(),
+    price: yup.number().required('Price is required'),
     expirationDate: yup
       .date()
       .min(new Date())
-      .required('Expiration date is required')
+      .required('Expiration date is required'),
+    orderId: yup.string().required('Id is required')
   })
   .required()
 
-const formatToUSD = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-  }).format(amount)
-}
-
 const OrderForm = () => {
   dayjs.extend(utc)
+
+  const addOrder = useOrdersStore((state) => state.addOrder)
 
   const { data, isLoading } = useCoins()
   const {
@@ -61,7 +63,10 @@ const OrderForm = () => {
     reset,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      orderId: uuidv4()
+    }
   })
 
   const handleType = (
@@ -73,14 +78,26 @@ const OrderForm = () => {
     }
   }
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
+  const onSubmit = handleSubmit((order) => {
+    console.log(order)
+    addOrder(order)
+    reset({
+      orderId: uuidv4()
+    })
   })
 
   const expirationDate = watch('expirationDate')
   const expirationDateUTC = expirationDate
     ? dayjs(expirationDate).utc().format('YYYY-MM-DD HH:mm:ss')
     : ''
+  const cryptocurrency = watch('cryptocurrency')
+  const amount = watch('amount')
+
+  useEffect(() => {
+    const selectedCoin = data?.find((coin) => coin.id === cryptocurrency)
+    const priceInUSD = (selectedCoin?.current_price ?? 0) * (amount ?? 0)
+    setValue('price', priceInUSD)
+  }, [cryptocurrency, amount, data, setValue])
 
   return (
     <>
