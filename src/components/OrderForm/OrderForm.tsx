@@ -58,6 +58,7 @@ const OrderForm = () => {
   const addOrder = useOrdersStore((state) => state.addOrder)
   const updateOrder = useOrdersStore((state) => state.updateOrder)
   const clearSelectedOrder = useOrdersStore((state) => state.clearSelectedOrder)
+  const currentAction = useOrdersStore((state) => state.currentAction)
 
   const {
     register,
@@ -92,10 +93,10 @@ const OrderForm = () => {
   }
 
   const onSubmit = handleSubmit((order) => {
-    console.log(order)
     if (selectedOrder) {
       updateOrder(selectedOrder.orderId, order)
       clearSelectedOrder()
+      reset()
     } else {
       addOrder(order)
       reset({
@@ -120,13 +121,13 @@ const OrderForm = () => {
   }, [cryptocurrency, amount, data, setValue])
 
   useEffect(() => {
-    if (selectedOrder) {
+    if (selectedOrder && currentAction === 'edit') {
       Object.keys(selectedOrder).forEach((key) => {
         const typedKey = key as keyof IOrder
         setValue(typedKey, selectedOrder[typedKey])
       })
     }
-  }, [selectedOrder, setValue])
+  }, [selectedOrder, currentAction, setValue])
 
   return (
     <>

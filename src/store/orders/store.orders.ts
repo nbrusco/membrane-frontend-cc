@@ -9,6 +9,7 @@ export const useOrdersStore = create<IOrdersStore>()(
       return {
         orders: [],
         selectedOrder: null,
+        currentAction: null,
 
         selectOrder: (orderId) => {
           const { orders } = get()
@@ -19,6 +20,14 @@ export const useOrdersStore = create<IOrdersStore>()(
 
         clearSelectedOrder: () => {
           set({ selectedOrder: null })
+        },
+
+        setCurrentAction: (action) => {
+          set({ currentAction: action })
+        },
+
+        clearCurrentAction: () => {
+          set({ currentAction: null })
         },
 
         addOrder: (order) => {

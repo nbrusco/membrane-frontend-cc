@@ -7,6 +7,7 @@ import OrderList from '@/components/OrderList/OrderList'
 
 const Home = () => {
   const selectedOrder = useOrdersStore((state) => state.selectedOrder)
+  const currentAction = useOrdersStore((state) => state.currentAction)
 
   return (
     <main>
@@ -15,7 +16,7 @@ const Home = () => {
           Order Form
         </Typography>
         <Typography variant='subtitle1' textAlign='center' my={3}>
-          {selectedOrder?.orderId
+          {selectedOrder?.orderId && currentAction === 'edit'
             ? `Editing order ${selectedOrder.orderId}`
             : 'New order'}
         </Typography>
