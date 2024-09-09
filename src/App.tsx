@@ -7,7 +7,7 @@ function App() {
   return (
     <main>
       <Typography variant='h2' textAlign='center' m={3}>
-        Cryptocurrency OTC Exchange - Rather Labs
+        Cryptocurrency OTC - Rather Labs
       </Typography>
       <Container maxWidth='xs'>
         <Typography variant='h4' textAlign='center' m={3}>
