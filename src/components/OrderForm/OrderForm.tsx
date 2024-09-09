@@ -152,18 +152,24 @@ const OrderForm = () => {
                   <ToggleButton
                     value='buy'
                     aria-label='buy'
-                    className={`w-1/2 transition-all duration-300 hover:bg-green-400 ${
-                      watch('orderType') === 'buy' && 'bg-green-500 '
-                    }`}
+                    className={`w-1/2 transition-all duration-300 hover:bg-green-400
+                      ${
+                        errors.orderType ? 'transition-none border-red-500' : ''
+                      }
+                      ${watch('orderType') === 'buy' && 'bg-green-500 '}
+                    `}
                   >
                     Buy
                   </ToggleButton>
                   <ToggleButton
                     value='sell'
                     aria-label='sell'
-                    className={`w-1/2 transition-all duration-300 hover:bg-red-400 ${
-                      watch('orderType') === 'sell' && 'bg-red-500 '
-                    }`}
+                    className={`w-1/2 transition-all duration-300 hover:bg-red-400
+                      ${
+                        errors.orderType ? 'transition-none border-red-500' : ''
+                      }
+                      ${watch('orderType') === 'sell' && 'bg-red-500 '}
+                    `}
                   >
                     Sell
                   </ToggleButton>
