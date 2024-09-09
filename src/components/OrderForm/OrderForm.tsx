@@ -48,12 +48,13 @@ const validationSchema = yup
   })
   .required()
 
+dayjs.extend(utc)
+
 const OrderForm = () => {
-  dayjs.extend(utc)
+  const { data, isLoading, refetch } = useCoins()
 
   const addOrder = useOrdersStore((state) => state.addOrder)
 
-  const { data, isLoading } = useCoins()
   const {
     register,
     control,
@@ -92,6 +93,15 @@ const OrderForm = () => {
     : ''
   const cryptocurrency = watch('cryptocurrency')
   const amount = watch('amount')
+
+  useEffect(() => {
+    const refetchData = async () => {
+      if (amount) {
+        await refetch()
+      }
+    }
+    refetchData()
+  }, [amount, refetch])
 
   useEffect(() => {
     const selectedCoin = data?.find((coin) => coin.id === cryptocurrency)
