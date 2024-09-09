@@ -48,6 +48,12 @@
             ],
             "@store/*": [
                 "src/store/*"
+            ],
+            "@pages/*": [
+                "src/pages/*"
+            ],
+            "@routes/*": [
+                "src/routes/*"
             ]
         }
     }

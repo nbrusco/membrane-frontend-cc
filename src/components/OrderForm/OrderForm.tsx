@@ -16,14 +16,13 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import Box from '@mui/material/Box'
-import CircularProgress from '@mui/material/CircularProgress'
 
 import { useOrdersStore } from '@/store/orders/store.orders'
 
 import { useCoins } from '@/hooks/useCoins/useCoins'
 
 import DateTimeSelector from '../DateTimeSelector/DateTimeSelector'
+import Loader from '../Loader/Loader'
 
 import { validationProps } from '@/utils/validationProps'
 import { formatToUSD } from '@/utils/formatToUSD'
@@ -132,16 +131,7 @@ const OrderForm = () => {
   return (
     <>
       {isLoading ? (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            scale: '200%'
-          }}
-        >
-          <CircularProgress className='my-16' />
-        </Box>
+        <Loader />
       ) : (
         <form onSubmit={onSubmit} className='flex flex-col gap-3'>
           <div className='flex flex-col gap-2'>
