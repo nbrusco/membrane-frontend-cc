@@ -1,4 +1,5 @@
 import OrderForm from './components/OrderForm/OrderForm'
+import OrderList from './components/OrderList/OrderList'
 
 import { Typography, Container } from '@mui/material'
 
@@ -18,6 +19,7 @@ function App() {
         <Typography variant='h4' textAlign='center' m={3}>
           Order List
         </Typography>
+        <OrderList />
       </Container>
     </main>
   )

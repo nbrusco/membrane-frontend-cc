@@ -8,27 +8,38 @@ export const useOrdersStore = create<IOrdersStore>()(
     (set, get) => {
       return {
         orders: [],
+        selectedOrder: null,
 
-        selectOrders: () => get().orders,
+        selectOrder: (orderId) => {
+          const { orders } = get()
+          set({
+            selectedOrder: orders.find((order) => order.orderId === orderId)
+          })
+        },
+
+        clearSelectedOrder: () => {
+          set({ selectedOrder: undefined });
+        },
 
         addOrder: (order) => {
-          set((state) => ({
-            orders: [...state.orders, order]
-          }))
+          const { orders } = get()
+          set({ orders: [...orders, order] })
         },
 
         removeOrder: (orderId) => {
-          set((state) => ({
-            orders: state.orders.filter((order) => order.orderId !== orderId)
-          }))
+          const { orders } = get()
+          set({
+            orders: orders.filter((order) => order.orderId !== orderId)
+          })
         },
 
         updateOrder: (orderId, newOrder) => {
-          set((state) => ({
-            orders: state.orders.map((order) =>
+          const { orders } = get()
+          set({
+            orders: orders.map((order) =>
               order.orderId === orderId ? newOrder : order
             )
-          }))
+          })
         }
       }
     },
