@@ -28,6 +28,8 @@ import DateTimeSelector from '../DateTimeSelector/DateTimeSelector'
 import { validationProps } from '@/utils/validationProps'
 import { formatToUSD } from '@/utils/formatToUSD'
 
+import { IOrder } from '@/interfaces/IOrder'
+
 const validationSchema = yup
   .object()
   .shape({
@@ -53,7 +55,10 @@ dayjs.extend(utc)
 const OrderForm = () => {
   const { data, isLoading, refetch } = useCoins()
 
+  const selectedOrder = useOrdersStore((state) => state.selectedOrder)
   const addOrder = useOrdersStore((state) => state.addOrder)
+  const updateOrder = useOrdersStore((state) => state.updateOrder)
+  const clearSelectedOrder = useOrdersStore((state) => state.clearSelectedOrder)
 
   const {
     register,
@@ -70,6 +75,14 @@ const OrderForm = () => {
     }
   })
 
+  const orderId = watch('orderId')
+  const expirationDate = watch('expirationDate')
+  const expirationDateUTC = expirationDate
+    ? dayjs(expirationDate).utc().format('YYYY-MM-DD HH:mm:ss')
+    : ''
+  const cryptocurrency = watch('cryptocurrency')
+  const amount = watch('amount')
+
   const handleType = (
     event: React.MouseEvent<HTMLElement>,
     newType: string
@@ -81,18 +94,16 @@ const OrderForm = () => {
 
   const onSubmit = handleSubmit((order) => {
     console.log(order)
-    addOrder(order)
-    reset({
-      orderId: uuidv4()
-    })
+    if (selectedOrder) {
+      updateOrder(selectedOrder.orderId, order)
+      clearSelectedOrder()
+    } else {
+      addOrder(order)
+      reset({
+        orderId: uuidv4()
+      })
+    }
   })
-
-  const expirationDate = watch('expirationDate')
-  const expirationDateUTC = expirationDate
-    ? dayjs(expirationDate).utc().format('YYYY-MM-DD HH:mm:ss')
-    : ''
-  const cryptocurrency = watch('cryptocurrency')
-  const amount = watch('amount')
 
   useEffect(() => {
     const refetchData = async () => {
@@ -101,13 +112,22 @@ const OrderForm = () => {
       }
     }
     refetchData()
-  }, [amount, refetch])
+  }, [amount, orderId, refetch])
 
   useEffect(() => {
     const selectedCoin = data?.find((coin) => coin.id === cryptocurrency)
     const priceInUSD = (selectedCoin?.current_price ?? 0) * (amount ?? 0)
     setValue('price', priceInUSD)
   }, [cryptocurrency, amount, data, setValue])
+
+  useEffect(() => {
+    if (selectedOrder) {
+      Object.keys(selectedOrder).forEach((key) => {
+        const typedKey = key as keyof IOrder
+        setValue(typedKey, selectedOrder[typedKey])
+      })
+    }
+  }, [selectedOrder, setValue])
 
   return (
     <>
@@ -283,7 +303,10 @@ const OrderForm = () => {
               Place Order
             </Button>
             <Button
-              onClick={() => reset()}
+              onClick={() => {
+                reset()
+                clearSelectedOrder()
+              }}
               variant='contained'
               className='w-1/3 bg-slate-500'
             >
@@ -291,6 +314,9 @@ const OrderForm = () => {
             </Button>
           </div>
 
+          <Typography variant='h6' className='mt-4'>
+            Form State for debugging
+          </Typography>
           <pre>{JSON.stringify(watch(), null, 2)}</pre>
         </form>
       )}

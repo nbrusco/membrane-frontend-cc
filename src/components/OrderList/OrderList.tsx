@@ -45,7 +45,12 @@ const OrderList = () => {
                 titleTypographyProps={{ variant: 'body1' }}
                 subheaderTypographyProps={{
                   variant: 'subtitle1',
-                  color: 'textSecondary'
+                  color: 'textSecondary',
+                  className: `${
+                    order.orderType === 'buy'
+                      ? 'text-green-500'
+                      : 'text-red-500'
+                  }`
                 }}
               />
               <CardContent className='px-0 py-1'>
@@ -84,7 +89,12 @@ const OrderList = () => {
                   </div>
                   <div className='absolute top-4 right-3 flex justify-end'>
                     <Tooltip title='Edit Order'>
-                      <IconButton>
+                      <IconButton
+                        onClick={() => {
+                          selectOrder(order.orderId)
+                          window.scrollTo({ top: 0, behavior: 'smooth' })
+                        }}
+                      >
                         <EditIcon />
                       </IconButton>
                     </Tooltip>

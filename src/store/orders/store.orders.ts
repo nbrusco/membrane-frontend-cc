@@ -18,7 +18,7 @@ export const useOrdersStore = create<IOrdersStore>()(
         },
 
         clearSelectedOrder: () => {
-          set({ selectedOrder: undefined });
+          set({ selectedOrder: null })
         },
 
         addOrder: (order) => {
@@ -44,7 +44,10 @@ export const useOrdersStore = create<IOrdersStore>()(
       }
     },
     {
-      name: 'orders-storage'
+      partialize: (state) => ({
+        orders: state.orders
+      }),
+      name: 'orders'
     }
   )
 )
