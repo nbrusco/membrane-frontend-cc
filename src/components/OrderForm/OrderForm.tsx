@@ -88,7 +88,7 @@ const OrderForm = () => {
     newType: string
   ) => {
     if (newType !== null) {
-      setValue('orderType', newType)
+      setValue('orderType', newType, { shouldValidate: true })
     }
   }
 
