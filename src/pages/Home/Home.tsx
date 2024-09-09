@@ -10,9 +10,6 @@ const Home = () => {
 
   return (
     <main>
-      <Typography variant='h2' textAlign='center' m={3}>
-        Cryptocurrency OTC - Rather Labs
-      </Typography>
       <Container maxWidth='sm'>
         <Typography variant='h4' textAlign='center' m={3}>
           Order Form

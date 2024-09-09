@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { paths } from './paths'
 
+const Layout = lazy(() => import('@/components/Layout/Layout'))
 const Home = lazy(() => import('@/pages/Home/Home'))
 
 const AppRoutes: React.FC = () => {
@@ -9,7 +10,9 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes location={location} key={location.pathname}>
-      <Route path={paths.home} element={<Home />} />
+      <Route element={<Layout />}>
+        <Route path={paths.home} element={<Home />} />
+      </Route>
     </Routes>
   )
 }
