@@ -241,6 +241,11 @@ const OrderForm = () => {
                   ?.current_price ?? 0) * (watch('amount') ?? 0)
               )}
             </Typography>
+            {errors.price && (
+              <Typography className='text-red-500 text-sm'>
+                {errors.price.message}
+              </Typography>
+            )}
           </div>
 
           <div>

@@ -11,7 +11,7 @@ export const orderValidationSchema = yup
       .positive('Amount must be greater than 0')
       .required('Amount is required')
       .min(0.000001, 'Amount must be at least 0.00001'),
-    price: yup.number().required('Price is required'),
+    price: yup.number().min(0.01, "Minimum order is $0.01 USD").required('Price is required'),
     expirationDate: yup
       .date()
       .min(new Date(), "Expiration date can't be in the past")
