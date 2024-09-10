@@ -2,6 +2,8 @@
 
 ![](https://assets-global.website-files.com/62aa13c37f94356be439f46e/650217195b3d7ac2d01bace8_Rather_logonegro.svg)
 
+https://github.com/user-attachments/assets/bab003e0-3b0a-4716-a5b4-1acc84c261c6
+
 # Index
 
 1. [Description](#description-en)
