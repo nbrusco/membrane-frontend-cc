@@ -58,6 +58,7 @@ const OrderForm = () => {
   const addOrder = useOrdersStore((state) => state.addOrder)
   const updateOrder = useOrdersStore((state) => state.updateOrder)
   const clearSelectedOrder = useOrdersStore((state) => state.clearSelectedOrder)
+  const currentAction = useOrdersStore((state) => state.currentAction)
 
   const {
     register,
@@ -87,15 +88,15 @@ const OrderForm = () => {
     newType: string
   ) => {
     if (newType !== null) {
-      setValue('orderType', newType)
+      setValue('orderType', newType, { shouldValidate: true })
     }
   }
 
   const onSubmit = handleSubmit((order) => {
-    console.log(order)
     if (selectedOrder) {
       updateOrder(selectedOrder.orderId, order)
       clearSelectedOrder()
+      reset()
     } else {
       addOrder(order)
       reset({
@@ -120,13 +121,13 @@ const OrderForm = () => {
   }, [cryptocurrency, amount, data, setValue])
 
   useEffect(() => {
-    if (selectedOrder) {
+    if (selectedOrder && currentAction === 'edit') {
       Object.keys(selectedOrder).forEach((key) => {
         const typedKey = key as keyof IOrder
         setValue(typedKey, selectedOrder[typedKey])
       })
     }
-  }, [selectedOrder, setValue])
+  }, [selectedOrder, currentAction, setValue])
 
   return (
     <>
@@ -151,18 +152,24 @@ const OrderForm = () => {
                   <ToggleButton
                     value='buy'
                     aria-label='buy'
-                    className={`w-1/2 transition-all duration-300 hover:bg-green-400 ${
-                      watch('orderType') === 'buy' && 'bg-green-500 '
-                    }`}
+                    className={`w-1/2 transition-all duration-300 hover:bg-green-400
+                      ${
+                        errors.orderType ? 'transition-none border-red-500' : ''
+                      }
+                      ${watch('orderType') === 'buy' && 'bg-green-500 '}
+                    `}
                   >
                     Buy
                   </ToggleButton>
                   <ToggleButton
                     value='sell'
                     aria-label='sell'
-                    className={`w-1/2 transition-all duration-300 hover:bg-red-400 ${
-                      watch('orderType') === 'sell' && 'bg-red-500 '
-                    }`}
+                    className={`w-1/2 transition-all duration-300 hover:bg-red-400
+                      ${
+                        errors.orderType ? 'transition-none border-red-500' : ''
+                      }
+                      ${watch('orderType') === 'sell' && 'bg-red-500 '}
+                    `}
                   >
                     Sell
                   </ToggleButton>

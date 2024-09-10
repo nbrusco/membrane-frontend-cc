@@ -25,6 +25,9 @@ const OrderList = () => {
   const clearSelectedOrder = useOrdersStore((state) => state.clearSelectedOrder)
   const removeOrder = useOrdersStore((state) => state.removeOrder)
 
+  const setCurrentAction = useOrdersStore((state) => state.setCurrentAction)
+  const clearCurrentAction = useOrdersStore((state) => state.clearCurrentAction)
+
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
 
   return (
@@ -92,6 +95,7 @@ const OrderList = () => {
                       <IconButton
                         onClick={() => {
                           selectOrder(order.orderId)
+                          setCurrentAction('edit')
                           window.scrollTo({ top: 0, behavior: 'smooth' })
                         }}
                       >
@@ -102,6 +106,7 @@ const OrderList = () => {
                       <IconButton
                         onClick={() => {
                           selectOrder(order.orderId)
+                          setCurrentAction('delete')
                           setOpenDeleteDialog(true)
                         }}
                       >
@@ -118,11 +123,13 @@ const OrderList = () => {
             onClose={() => {
               setOpenDeleteDialog(false)
               clearSelectedOrder()
+              clearCurrentAction()
             }}
             onConfirm={() => {
               if (selectedOrder) {
                 setOpenDeleteDialog(false)
                 removeOrder(selectedOrder.orderId)
+                clearCurrentAction()
               }
             }}
           />
