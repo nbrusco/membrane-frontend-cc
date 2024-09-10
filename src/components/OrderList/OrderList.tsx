@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
 
+import { toast } from 'react-toastify'
+
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
@@ -8,6 +10,7 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import Grid from '@mui/material/Grid2'
 
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -39,84 +42,86 @@ const OrderList = () => {
           </Typography>
         </Card>
       ) : (
-        <>
+        <Grid container spacing={2}>
           {orders.map((order) => (
-            <Card key={order.orderId} className='relative m-2 p-2'>
-              <CardHeader
-                title={`Order ID: ${order.orderId}`}
-                subheader={`Order Type: ${order.orderType.toUpperCase()}`}
-                titleTypographyProps={{ variant: 'body1' }}
-                subheaderTypographyProps={{
-                  variant: 'subtitle1',
-                  color: 'textSecondary',
-                  className: `${
-                    order.orderType === 'buy'
-                      ? 'text-green-500'
-                      : 'text-red-500'
-                  }`
-                }}
-              />
-              <CardContent className='px-0 py-1'>
-                <Container>
-                  <div className='flex flex-wrap gap-y-4'>
-                    <div className='w-1/2 flex flex-col'>
-                      <Typography variant='body1' color='textSecondary'>
-                        Cryptocurrency:
-                      </Typography>
-                      <Typography variant='body1'>
-                        {order.cryptocurrency.toUpperCase()}
-                      </Typography>
+            <Grid size={6}>
+              <Card key={order.orderId} className='relative m-2 p-2'>
+                <CardHeader
+                  title={`Order ID: ${order.orderId}`}
+                  subheader={`Order Type: ${order.orderType.toUpperCase()}`}
+                  titleTypographyProps={{ variant: 'body1' }}
+                  subheaderTypographyProps={{
+                    variant: 'subtitle1',
+                    color: 'textSecondary',
+                    className: `${
+                      order.orderType === 'buy'
+                        ? 'text-green-500'
+                        : 'text-red-500'
+                    }`
+                  }}
+                />
+                <CardContent className='px-0 py-1'>
+                  <Container>
+                    <div className='flex flex-wrap gap-y-4'>
+                      <div className='w-1/2 flex flex-col'>
+                        <Typography variant='body1' color='textSecondary'>
+                          Cryptocurrency:
+                        </Typography>
+                        <Typography variant='body1'>
+                          {order.cryptocurrency.toUpperCase()}
+                        </Typography>
+                      </div>
+                      <div className='w-1/2 flex flex-col'>
+                        <Typography variant='body1' color='textSecondary'>
+                          Amount:
+                        </Typography>
+                        <Typography variant='body1'>{order.amount}</Typography>
+                      </div>
+                      <div className='w-1/2 flex flex-col'>
+                        <Typography variant='body1' color='textSecondary'>
+                          Order price in USD:
+                        </Typography>
+                        <Typography variant='body1'>
+                          {formatToUSD(order.price)}
+                        </Typography>
+                      </div>
+                      <div className='w-1/2 flex flex-col'>
+                        <Typography variant='body1' color='textSecondary'>
+                          Expiration Date:
+                        </Typography>
+                        <Typography variant='body1'>
+                          {dayjs(order.expirationDate).format('MMMM DD, YYYY')}
+                        </Typography>
+                      </div>
                     </div>
-                    <div className='w-1/2 flex flex-col'>
-                      <Typography variant='body1' color='textSecondary'>
-                        Amount:
-                      </Typography>
-                      <Typography variant='body1'>{order.amount}</Typography>
+                    <div className='absolute top-4 right-3 flex justify-end'>
+                      <Tooltip title='Edit Order'>
+                        <IconButton
+                          onClick={() => {
+                            selectOrder(order.orderId)
+                            setCurrentAction('edit')
+                            window.scrollTo({ top: 0, behavior: 'smooth' })
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title='Delete Order'>
+                        <IconButton
+                          onClick={() => {
+                            selectOrder(order.orderId)
+                            setCurrentAction('delete')
+                            setOpenDeleteDialog(true)
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
                     </div>
-                    <div className='w-1/2 flex flex-col'>
-                      <Typography variant='body1' color='textSecondary'>
-                        Order price in USD:
-                      </Typography>
-                      <Typography variant='body1'>
-                        {formatToUSD(order.price)}
-                      </Typography>
-                    </div>
-                    <div className='w-1/2 flex flex-col'>
-                      <Typography variant='body1' color='textSecondary'>
-                        Expiration Date:
-                      </Typography>
-                      <Typography variant='body1'>
-                        {dayjs(order.expirationDate).format('MMMM DD, YYYY')}
-                      </Typography>
-                    </div>
-                  </div>
-                  <div className='absolute top-4 right-3 flex justify-end'>
-                    <Tooltip title='Edit Order'>
-                      <IconButton
-                        onClick={() => {
-                          selectOrder(order.orderId)
-                          setCurrentAction('edit')
-                          window.scrollTo({ top: 0, behavior: 'smooth' })
-                        }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title='Delete Order'>
-                      <IconButton
-                        onClick={() => {
-                          selectOrder(order.orderId)
-                          setCurrentAction('delete')
-                          setOpenDeleteDialog(true)
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                </Container>
-              </CardContent>
-            </Card>
+                  </Container>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
           <DeleteDialog
             open={openDeleteDialog}
@@ -129,11 +134,12 @@ const OrderList = () => {
               if (selectedOrder) {
                 setOpenDeleteDialog(false)
                 removeOrder(selectedOrder.orderId)
+                toast.success(`Order ${selectedOrder.orderId} deleted`)
                 clearCurrentAction()
               }
             }}
           />
-        </>
+        </Grid>
       )}
     </>
   )

@@ -8,6 +8,8 @@ import utc from 'dayjs/plugin/utc'
 
 import { v4 as uuidv4 } from 'uuid'
 
+import { toast } from 'react-toastify'
+
 import { Button, Typography } from '@mui/material'
 
 import InputLabel from '@mui/material/InputLabel'
@@ -95,10 +97,12 @@ const OrderForm = () => {
   const onSubmit = handleSubmit((order) => {
     if (selectedOrder) {
       updateOrder(selectedOrder.orderId, order)
+      toast.success(`Order ${selectedOrder.orderId} updated`)
       clearSelectedOrder()
       reset()
     } else {
       addOrder(order)
+      toast.success('Order placed successfully')
       reset({
         orderId: uuidv4()
       })

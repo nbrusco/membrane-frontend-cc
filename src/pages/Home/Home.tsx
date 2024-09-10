@@ -22,7 +22,7 @@ const Home = () => {
         </Typography>
         <OrderForm />
       </Container>
-      <Container maxWidth='sm'>
+      <Container maxWidth='lg'>
         <Typography variant='h4' textAlign='center' m={3}>
           Order List
         </Typography>
