@@ -223,7 +223,7 @@ const OrderForm = () => {
               className='w-full'
               id='outlined-basic'
               variant='outlined'
-              inputProps={{ min: 0 }}
+              inputProps={{ min: 0, step: 'any' }}
               error={!!errors.amount}
             />
             {errors.amount && (
