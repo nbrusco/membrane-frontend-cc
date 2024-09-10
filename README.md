@@ -2,6 +2,8 @@
 
 ![](https://assets-global.website-files.com/62aa13c37f94356be439f46e/650217195b3d7ac2d01bace8_Rather_logonegro.svg)
 
+https://github.com/user-attachments/assets/bab003e0-3b0a-4716-a5b4-1acc84c261c6
+
 # Index
 
 1. [Description](#description-en)
@@ -133,11 +135,11 @@ The project runs by default on port 5174. You can access it through the followin
 
 ## 6. Deploy
 
-Additionally, the project is hosted on Vercel and can be accessed through the following link:
+Additionally, the project is hosted on Netlify and can be accessed through the following link:
 
-- ### Vercel:
+- ### Netlify:
 
-  - **URL:** [Vercel Deploy](https://membrane-frontend-cc-eight.vercel.app/)
+  - **URL:** [Netlify Deploy](https://membrane-frontend-cc-nbrusco.netlify.app/)
 
 <a name="docs-en"></a>
 
