@@ -315,10 +315,10 @@ const OrderForm = () => {
             </Button>
           </div>
 
-          <Typography variant='h6' className='mt-4'>
+          {/* <Typography variant='h6' className='mt-4'>
             Form State for debugging
           </Typography>
-          <pre>{JSON.stringify(watch(), null, 2)}</pre>
+          <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
         </form>
       )}
     </>
