@@ -54,6 +54,9 @@
             ],
             "@routes/*": [
                 "src/routes/*"
+            ],
+            "@validation/*": [
+                "src/validation/*"
             ]
         }
     }

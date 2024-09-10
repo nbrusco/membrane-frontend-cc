@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 
 import dayjs, { Dayjs } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -31,25 +30,7 @@ import { formatToUSD } from '@/utils/formatToUSD'
 
 import { IOrder } from '@/interfaces/IOrder'
 
-const validationSchema = yup
-  .object()
-  .shape({
-    orderType: yup.string().required('Order type is required'),
-    cryptocurrency: yup.string().required('Cryptocurrency is required'),
-    amount: yup
-      .number()
-      .typeError('Amount must be a valid number')
-      .positive('Amount must be greater than 0')
-      .required('Amount is required')
-      .min(0.000001, 'Amount must be at least 0.00001'),
-    price: yup.number().required('Price is required'),
-    expirationDate: yup
-      .date()
-      .min(new Date())
-      .required('Expiration date is required'),
-    orderId: yup.string().required('Id is required')
-  })
-  .required()
+import { orderValidationSchema } from '@/validation/orderValidationSchema'
 
 dayjs.extend(utc)
 
@@ -71,7 +52,7 @@ const OrderForm = () => {
     reset,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(orderValidationSchema),
     defaultValues: {
       orderId: uuidv4()
     }
